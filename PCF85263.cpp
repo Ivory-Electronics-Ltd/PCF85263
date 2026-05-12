@@ -26,9 +26,9 @@ int PCF85263::begin()
   _lastRead = 0;
   if (! isConnected())
   {
-    return false;
+    return PCF85263_ERROR_CONNECT;
   }
-  return true;
+  return PCF85263_OK;
 }
 
 
@@ -97,11 +97,13 @@ uint32_t PCF85263::lastRead()
 //
 //  GETTERS
 //
+//  _reg[] layout matches the chip's register order starting at 0x01:
+//    [0]=seconds, [1]=minutes, [2]=hours, [3]=days, [4]=weekdays, [5]=months, [6]=years
 uint8_t PCF85263::seconds() { return _reg[0] & 0x7F; }
 uint8_t PCF85263::minutes() { return _reg[1] & 0x7F; }
 uint8_t PCF85263::hours()   { return _reg[2] & 0x3F; }
-uint8_t PCF85263::weekDay() { return _reg[3] & 0x3F; }
-uint8_t PCF85263::day()     { return _reg[4] & 0x07; }
+uint8_t PCF85263::day()     { return _reg[3] & 0x3F; }
+uint8_t PCF85263::weekDay() { return _reg[4] & 0x07; }
 uint8_t PCF85263::month()   { return _reg[5] & 0x1F; }
 uint8_t PCF85263::year()    { return _reg[6] & 0xFF; }
 
@@ -113,8 +115,8 @@ uint8_t PCF85263::year()    { return _reg[6] & 0xFF; }
 void PCF85263::setSeconds(uint8_t value) { _reg[0] = value; }
 void PCF85263::setMinutes(uint8_t value) { _reg[1] = value; }
 void PCF85263::setHours(uint8_t value)   { _reg[2] = value; }
-void PCF85263::setWeekDay(uint8_t value) { _reg[3] = value; }
-void PCF85263::setDay(uint8_t value)     { _reg[4] = value; }
+void PCF85263::setDay(uint8_t value)     { _reg[3] = value; }
+void PCF85263::setWeekDay(uint8_t value) { _reg[4] = value; }
 void PCF85263::setMonth(uint8_t value)   { _reg[5] = value; }
 void PCF85263::setYear(uint8_t value)    { _reg[6] = value; }
 
